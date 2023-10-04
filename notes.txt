@@ -1,0 +1,13 @@
+1. npm init -y
+2. npm i react react-dom
+3. npm i -D @types/react @types/react-dom
+4. npm i -D webpack webpack-cli webpack-dev-server
+5. npm i -D style-loader css-loader postcss-loader
+6. npm i -D html-webpack-plugin
+7. npm i -D babel-loader @babel/core @babel/preset-env @babel/preset-react @babel/preset-typescript
+8. npm i axios
+9. npm i -D webpack-bundle-analyzer
+10. setup webpack.config file
+11. npm i -D typescript ts-loader - ts-loader is optional instead use preset-typescript
+12. 3. npm i -D autoprefixer postcss-loader
+13. config tailwind.config.cjs and postcss.config.cjs
