@@ -11,3 +11,10 @@
 11. npm i -D typescript ts-loader - ts-loader is optional instead use preset-typescript
 12. 3. npm i -D autoprefixer postcss-loader
 13. config tailwind.config.cjs and postcss.config.cjs
+14. npm init @eslint/config and choose enforce code styles
+15. npm i -D @typescript-eslint/parser eslint-config-airbnb eslint-plugin-jsx-ally eslint-plugin-react-hooks
+16. npm i -D eslint-config-airbnb-typescript
+17. npm i -D prettier eslint-config-prettier eslint-plugin-prettier
+18. install prettier and lintel extensions
+19. npx husky-init && npm install --> install husly and lintStaged to run pre-commit hook
+20. npx husky set .husky/pre-commit "npm run lint && npm run test"
