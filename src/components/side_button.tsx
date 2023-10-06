@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { Link } from "react-router-dom";
 
 type SideButtonProps = {
@@ -24,8 +23,8 @@ function SideButton({
         aria-hidden="true"
         onClick={onClick}
         id={name}
-        className={` p-2 px-12 rounded-md text-left hover:cursor-pointer flex items-center ${
-          isActive ? "bg-red-300" : ""
+        className={`p-2 pl-2 px-12 rounded-md text-left hover:cursor-pointer flex items-center ${
+          isActive ? "bg-primary" : ""
         }`}
       >
         {icon && icon}

@@ -1,14 +1,15 @@
 import React from "react";
-import SideBar from "./sidebar";
+import { useNavigate } from "react-router-dom";
+import DisplayPost from "./display_post";
 
 function Home() {
+  const navigate = useNavigate();
   return (
-    <div className="flex space-x-3 px-6">
-      <SideBar />
-      <div className="bg-green-200 w-8/12">
-        <h1 className="">content</h1>
-      </div>
-      <div className="bg-blue-100 w-2/12">Rgiht side bar</div>
+    <div>
+      <h1 className="text-4xl font-bold mb-5">Home</h1>
+      {[1, 2, 3, 4, 5, 6, 7].map((item) => (
+        <DisplayPost key={item} onClick={(id) => navigate(`/post/${id}`)} />
+      ))}
     </div>
   );
 }

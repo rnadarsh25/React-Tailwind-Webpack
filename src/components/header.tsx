@@ -7,11 +7,8 @@ function Header() {
         <h1 className="text-3xl font-bold baseline max-w-sm ">@Byte</h1>
         <p className="text-base italic text-gray-400">
           Present your thoughts{" "}
-          <span className="font-bold text-blue-700 text-base">bit by bit</span>
+          <span className="font-bold text-primary text-base">bit by bit</span>
         </p>
-      </div>
-      <div>
-        <h1 className="max-w-sm hover:cursor-pointer">Logout</h1>
       </div>
     </div>
   );

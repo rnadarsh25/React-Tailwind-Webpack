@@ -1,15 +1,14 @@
 import React from "react";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { BrowserRouter } from "react-router-dom";
-import { Header, Home, Wrapper } from "./components";
+import { Header, Main, Wrapper } from "./components";
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="bg-black h-screen text-white">
+      <div className="bg-dark4 h-screen text-white">
         <Wrapper>
           <Header />
-          <Home />
+          <Main />
         </Wrapper>
       </div>
     </BrowserRouter>

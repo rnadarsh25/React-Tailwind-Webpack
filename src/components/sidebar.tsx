@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   HomeIcon,
   ClipboardIcon,
   MagnifyingGlassIcon,
   UserCircleIcon,
   ArrowLeftOnRectangleIcon,
+  BellAlertIcon,
 } from "@heroicons/react/24/outline";
 import SideButton from "./side_button";
 
@@ -21,6 +21,12 @@ const tabList = [
     text: "Search",
     route: "/search",
     icon: <MagnifyingGlassIcon className="w-7 h-7 mr-2" />,
+  },
+  {
+    name: "activity",
+    text: "Activity",
+    route: "/activity",
+    icon: <BellAlertIcon className="w-7 h-7 mr-2" />,
   },
   {
     name: "create",
@@ -44,10 +50,10 @@ const tabList = [
 function SideBar() {
   const [activeTab, setActiveTab] = useState<string>("");
   return (
-    <div className="w-2/12">
-      <ul className="bg-green-400">
+    <div className="w-2/12 mt-7">
+      <ul className="">
         {tabList.map((tab) => (
-          <li className="mb-3">
+          <li className="mb-3" key={tab.name}>
             <SideButton
               onClick={() => setActiveTab(tab.name)}
               icon={tab.icon}
