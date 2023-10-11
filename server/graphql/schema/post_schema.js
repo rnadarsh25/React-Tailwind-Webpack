@@ -22,6 +22,8 @@ extend type Mutation {
     addPost(post: AddPostInput!): Post @authenticate
     updatePost(id: ID!, edits: UpdatePostInput!): Post @authenticate
     deletePost(id: ID!): Post @authenticate
+    addReply(postId: ID!, post: AddPostInput!): Post @authenticate
+    postLike(postId: ID!): Post @authenticate
 }
 
 input AddPostInput {

@@ -7,7 +7,11 @@ import {
   ArrowLeftOnRectangleIcon,
   BellAlertIcon,
 } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
+import { useLazyQuery } from "@apollo/client";
 import SideButton from "./side_button";
+import { useAppContext } from "../context/app_context";
+import { USER_LOGOUT } from "../entities/queries";
 
 const tabList = [
   {
@@ -43,23 +47,41 @@ const tabList = [
   {
     name: "logout",
     text: "Logout",
-    route: "/logout",
+    route: "/",
     icon: <ArrowLeftOnRectangleIcon className="w-7 h-7 mr-2" />,
   },
 ];
 function SideBar() {
+  const { setCurrentUser } = useAppContext();
+  const navigate = useNavigate();
+  const { currentUser } = useAppContext();
+  const [logOut] = useLazyQuery(USER_LOGOUT);
   const [activeTab, setActiveTab] = useState<string>("");
+
+  const handleLogout = () => {
+    logOut();
+    setCurrentUser(undefined);
+    localStorage.setItem("CurrentUser", "");
+    navigate("/");
+  };
+
   return (
     <div className="w-2/12 mt-7">
       <ul className="">
         {tabList.map((tab) => (
           <li className="mb-3" key={tab.name}>
             <SideButton
-              onClick={() => setActiveTab(tab.name)}
+              onClick={() =>
+                tab.name === "logout" ? handleLogout() : setActiveTab(tab.name)
+              }
               icon={tab.icon}
               isActive={activeTab === tab.name}
               text={tab.text}
-              route={tab.route}
+              route={
+                tab.name === "profile"
+                  ? `${tab.route}/${currentUser?.id || ""}`
+                  : tab.route
+              }
               name={tab.name}
             />
           </li>

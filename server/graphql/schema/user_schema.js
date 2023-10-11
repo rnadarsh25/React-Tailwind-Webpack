@@ -29,8 +29,9 @@ type LoggedInUser {
 }
 
 extend type Query {
-    getUsers: [User] 
+    getUsers(filter: FilterUserInput): [User] 
     getUser(id: ID!): User @authenticate
+    getActivity: [Activity!] @authenticate
 }
 
 extend type Mutation {
@@ -52,6 +53,12 @@ input UpdateUserInput {
     password: String
     description: String
     userName: String
+}
+
+input FilterUserInput {
+    name:String
+    email: String
+
 }
 
 `;

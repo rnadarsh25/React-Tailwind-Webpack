@@ -18,7 +18,7 @@ function Main() {
           <Route path="/" Component={Home} />
           <Route path="/search" Component={SearchUser} />
           <Route path="/create" Component={CreateBit} />
-          <Route path="/profile" Component={Profile} />
+          <Route path="/profile/:id" Component={Profile} />
           <Route path="/post/:id" Component={Post} />
           <Route path="/activity" Component={Activity} />
         </Routes>

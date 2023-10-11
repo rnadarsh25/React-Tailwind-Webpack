@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ApolloProvider,
   ApolloClient,
@@ -7,15 +7,21 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { BrowserRouter } from "react-router-dom";
-import { Header, Main, Wrapper } from "./components";
+import { Header, Main, Wrapper, Login } from "./components";
+import { useAppContext } from "./context/app_context";
+import { CurrentUser } from "./context/types";
 
 function App() {
+  const { currentUser, setCurrentUser } = useAppContext();
+  let storedCurrentUser = localStorage.getItem("CurrentUser");
+  if (storedCurrentUser) {
+    storedCurrentUser = JSON.parse(storedCurrentUser);
+  }
   const mainLink = createHttpLink({
     uri: "http://localhost:4000/graphql",
   });
   const authLink = setContext((_, { headers }) => {
-    const token =
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTBjMjdjMWMyMGQ2OTU0MGU2NDJlODAiLCJpYXQiOjE2OTU2NTIzNzV9._l8rjbpY8EiyW4v-JdyFK_9jqkzIpQut6TxkodGSVLY";
+    const token = `Bearer ${currentUser?.token || ""}`;
     return {
       headers: {
         ...headers,
@@ -30,14 +36,25 @@ function App() {
     cache: new InMemoryCache(),
   });
 
+  useEffect(() => {
+    if (!currentUser && storedCurrentUser) {
+      setCurrentUser(storedCurrentUser as unknown as CurrentUser);
+    }
+  }, [storedCurrentUser]);
+
   return (
     <ApolloProvider client={client}>
       <BrowserRouter>
         <div className="bg-dark4 h-screen text-white">
           <Wrapper>
-            {/* <Login /> */}
-            <Header />
-            <Main />
+            {!currentUser ? (
+              <Login />
+            ) : (
+              <>
+                <Header />
+                <Main />
+              </>
+            )}
           </Wrapper>
         </div>
       </BrowserRouter>

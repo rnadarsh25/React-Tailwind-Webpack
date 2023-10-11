@@ -3,13 +3,24 @@ import User from '../../models/user_model.js';
 
 export default {
   Query: {
-    async getUsers() {
-      return await User.find();
+    async getUsers(_, args) {
+      const { name, email } = args.filter || { name: '', email: '' };
+      const users = await User.find();
+      const updatedUsers = users.filter(
+        (user) =>
+          user.name.toLowerCase().includes(name?.toLowerCase()) ||
+          user.email.toLowerCase().includes(email?.toLowerCase())
+      );
+      return updatedUsers;
     },
     async getUser(_, args) {
-      const { id } = args.id;
+      const { id } = args;
       const user = await User.findById(id);
       return user;
+    },
+    getActivity(_, args, context) {
+      const { user } = context;
+      return user.activity;
     },
   },
 
