@@ -6,7 +6,7 @@ import Avatar from "./avatar";
 import { GET_POST, GET_POSTS } from "../entities/queries";
 import DisplayLoader from "./display_loader";
 import { Post as TypePost } from "../entities/types";
-import { ADD_REPLY } from "../entities/mutations";
+import { ADD_REPLY, POST_LIKE } from "../entities/mutations";
 
 function Post() {
   const { id } = useParams();
@@ -14,6 +14,14 @@ function Post() {
   const [addReply] = useMutation(ADD_REPLY);
   const { data, loading, error } = useQuery(GET_POST, {
     variables: { id },
+  });
+
+  const [postLike] = useMutation(POST_LIKE, {
+    variables: {
+      postId: id,
+    },
+    awaitRefetchQueries: true,
+    refetchQueries: [GET_POST, GET_POSTS],
   });
 
   const handleOnAddReply = () => {
@@ -38,7 +46,7 @@ function Post() {
 
   return (
     <div>
-      <DisplayPost item={data?.getPost} />
+      <DisplayPost item={data?.getPost} onLike={() => postLike()} />
       <div className="flex justify-between my-5 border border-gray-700 border-l-0 border-r-0 py-10">
         <div className="flex w-full items-center rounded-l-full bg-dark4">
           <Avatar text="Adarsh" />
@@ -59,7 +67,19 @@ function Post() {
       </div>
       <div className="p-2 px-7">
         {data?.getPost.replies.map((item: TypePost) => (
-          <DisplayPost item={item} key={item.id} />
+          <DisplayPost
+            item={item}
+            key={item.id}
+            onLike={(likePostId: string) =>
+              postLike({
+                variables: {
+                  postId: likePostId,
+                },
+                awaitRefetchQueries: true,
+                refetchQueries: [GET_POST, GET_POSTS],
+              })
+            }
+          />
         ))}
       </div>
     </div>

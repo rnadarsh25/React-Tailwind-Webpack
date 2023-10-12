@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   HeartIcon,
   ChatBubbleLeftIcon,
@@ -7,19 +7,25 @@ import {
 } from "@heroicons/react/24/outline";
 import Avatar from "./avatar";
 import { Post } from "../entities/types";
+import { useAppContext } from "../context/app_context";
 
 type DisplayPostProps = {
   displayDeleteIcon?: boolean;
   onClick?: (id: string) => void;
   item: Post;
   hideReplyPost?: boolean;
+  onLike?: (id: string) => void;
+  onDelete?: (id: string) => void;
 };
 function DisplayPost({
   displayDeleteIcon = false,
   onClick,
   item,
   hideReplyPost = false,
+  onLike,
+  onDelete,
 }: DisplayPostProps) {
+  const { currentUser } = useAppContext();
   const postStepper = useMemo(() => {
     let post = [{ ...item }];
     const { repliedToPost = undefined } = item;
@@ -28,6 +34,16 @@ function DisplayPost({
     }
     return post;
   }, [item]);
+
+  const isLikedByLoggedInUser = useCallback(
+    (post: Post) => {
+      if (currentUser) {
+        return post.likedBy.some((it) => it.id === currentUser.id);
+      }
+      return false;
+    },
+    [currentUser],
+  );
 
   return (
     <div className="bg-dark4 rounded-xl mb-10 py-5 pl-2">
@@ -65,7 +81,10 @@ function DisplayPost({
                 </div>
                 <div className="flex space-x-3">
                   <div className="flex space-x-1 items-center">
-                    <HeartIcon className="w-7 h-7" />
+                    <HeartIcon
+                      className="w-7 h-7"
+                      onClick={() => onLike?.(post.id)}
+                    />
                     <p>{post.likedBy.length ? post.likedBy.length : ""}</p>
                   </div>
                   <div className="flex space-x-1 items-center">
@@ -81,6 +100,7 @@ function DisplayPost({
             </div>
             {displayDeleteIcon && (
               <button
+                onClick={() => onDelete?.(post.id)}
                 type="button"
                 className="self-start p-2 hover:bg-dark1 hover:rounded-full "
               >

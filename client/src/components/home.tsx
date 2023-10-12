@@ -1,15 +1,28 @@
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import DisplayPost from "./display_post";
 import DisplayLoader from "./display_loader";
 import { GET_POSTS } from "../entities/queries";
 import { Post } from "../entities/types";
+import { POST_LIKE } from "../entities/mutations";
 
 function Home() {
   const navigate = useNavigate();
   const { data, loading, error } = useQuery(GET_POSTS);
   const posts = useMemo(() => data?.getPosts || [], [data]);
+
+  const [postLike] = useMutation(POST_LIKE);
+  const handleOnLike = (postId: string) => {
+    postLike({
+      variables: {
+        postId,
+      },
+      awaitRefetchQueries: true,
+      refetchQueries: [GET_POSTS],
+    });
+  };
+
   if (loading) return <DisplayLoader />;
   if (error) return <DisplayLoader type="error" />;
 
@@ -22,6 +35,7 @@ function Home() {
           item={item}
           key={item?.id}
           onClick={(id) => navigate(`/post/${id}`)}
+          onLike={handleOnLike}
         />
       ))}
     </div>

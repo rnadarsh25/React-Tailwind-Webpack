@@ -6,7 +6,7 @@ import {
   ChatBubbleLeftRightIcon,
 } from "@heroicons/react/24/outline";
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { getNameInitials } from "../utils/helpers";
 import DisplayPost from "./display_post";
 import Button from "./button";
@@ -14,6 +14,7 @@ import { GET_USER } from "../entities/queries";
 import DisplayLoader from "./display_loader";
 import { Post } from "../entities/types";
 import { useAppContext } from "../context/app_context";
+import { DELETE_POST, POST_LIKE } from "../entities/mutations";
 
 function Profile() {
   const { id } = useParams() as { id: string };
@@ -26,6 +27,8 @@ function Profile() {
       id,
     },
   });
+  const [deletePost] = useMutation(DELETE_POST);
+  const [postLike] = useMutation(POST_LIKE);
 
   const isActive = useCallback(
     (type: string) => type === activeTab,
@@ -41,6 +44,26 @@ function Profile() {
   }, [activeTab, user?.posts]);
 
   const isLoggedInUser = useMemo(() => isCurrentUser(id), [id]);
+
+  const handleOnDeletePost = (deletePostId: string) => {
+    deletePost({
+      variables: {
+        deletePostId: deletePostId,
+      },
+      refetchQueries: [GET_USER],
+      awaitRefetchQueries: true,
+    });
+  };
+
+  const handleOnLike = (postId: string) => {
+    postLike({
+      variables: {
+        postId,
+      },
+      awaitRefetchQueries: true,
+      refetchQueries: [GET_USER],
+    });
+  };
 
   if (loading) return <DisplayLoader />;
   if (error) return <DisplayLoader type="error" />;
@@ -102,6 +125,8 @@ function Profile() {
               item={item}
               key={item.id}
               displayDeleteIcon={isLoggedInUser}
+              onDelete={handleOnDeletePost}
+              onLike={handleOnLike}
             />
           ))}
         </div>
